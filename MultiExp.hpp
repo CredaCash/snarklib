@@ -92,8 +92,10 @@ T multiExp(const std::vector<T>& base,
     const std::size_t M = callback ? callback->minorSteps() : 0;
     std::size_t progressCount = 0, callbackCount = 0;
 
+	//std::cerr << "base.size() " << base.size() << " scalar.size() " << scalar.size() << std::endl;
+
 #ifdef USE_ASSERT
-    assert(base.size() == scalar.size());
+    CCASSERT(base.size() == scalar.size());
 #endif
 
     if (base.empty()) {
@@ -141,7 +143,8 @@ T multiExp(const std::vector<T>& base,
                 abits = a.key.numBits(),
                 bbits = b.key.numBits();
 
-            reweight = (bbits >= (1u << std::min(20ul, abits - bbits)));
+            reweight = (bbits >= (((uint64_t)1) << std::min((std::size_t)(20), abits - bbits)));
+			//std::cerr << "multiExp sizeof(int) " <<  sizeof(int) << " sizeof(bbits) " << sizeof(bbits) << " bbits " << bbits << " abits " << abits << " min(20,abits-bbits) " << std::min((std::size_t)(20), abits - bbits) << " 1<< " << (((uint64_t)1) << std::min((std::size_t)(20), abits - bbits)) << " reweight " << reweight << std::endl;
         }
 
         // reweighting is both optimization and avoids overflow, the

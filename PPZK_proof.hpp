@@ -172,7 +172,7 @@ public:
             m_K.isZero();
     }
 
-private:
+//private:
     Pairing<G1, G1> m_A;
     Pairing<G2, G1> m_B;
     Pairing<G1, G1> m_C;

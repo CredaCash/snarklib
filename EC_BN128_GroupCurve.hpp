@@ -31,6 +31,7 @@ class BN128_GroupCurve : public ECInitGroups<N, MODULUS_R, MODULUS_Q>
     typedef Group<Fq, Fr, CURVE> G1;
     typedef Group<Fq2, Fr, CURVE> G2;
 
+public:
     static Fq coeff_b(const Fq& dummy) { return coeff_b(); }
     static Fq2 coeff_b(const Fq2& dummy) { return twist_coeff_b(); }
 

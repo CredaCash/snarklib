@@ -121,7 +121,7 @@ FpModel<N, MODULUS>::operator+= (const FpModel<N, MODULUS>& other)
                                              N + 1,
                                              MODULUS.data(),
                                              N);
-            assert(0 == borrow);
+            CCASSERT(0 == borrow);
         }
 
         mpn_copyi(m_monty.data(), scratch.data(), N);
@@ -222,7 +222,7 @@ FpModel<N, MODULUS>::operator-= (const FpModel<N, MODULUS>& other)
                                          N + 1,
                                          other.m_monty.data(),
                                          N);
-        assert(0 == borrow);
+        CCASSERT(0 == borrow);
 
         mpn_copyi(m_monty.data(), scratch.data(), N);
     }
@@ -449,7 +449,7 @@ void FpModel<N, MODULUS>::mulReduce(const BigInt<N>& other)
                                  N - i,
                                  carryout);
 
-            assert(0 == carryout);
+            CCASSERT(0 == carryout);
         }
 
         if (mpn_cmp(res.data() + N, MODULUS.data(), N) >= 0)
@@ -459,7 +459,7 @@ void FpModel<N, MODULUS>::mulReduce(const BigInt<N>& other)
                                              N,
                                              MODULUS.data(),
                                              N);
-            assert(0 == borrow);
+            CCASSERT(0 == borrow);
         }
 
         mpn_copyi(m_monty.data(), res.data() + N, N);

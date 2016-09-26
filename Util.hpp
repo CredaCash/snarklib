@@ -52,7 +52,7 @@ void batch_invert(std::vector<T>& vec) {
 
     for (const auto& elem : vec) {
 #ifdef USE_ASSERT
-        assert(! elem.isZero());
+        CCASSERT(! elem.isZero());
 #endif
         prod.push_back(accum);
         accum = accum * elem;
@@ -82,7 +82,7 @@ bool write_blockvector(const std::string& filePrefix,
                        std::function<void (std::ostream&, const T&)> func)
 {
 #ifdef USE_ASSERT
-    assert(space.globalID()[0] <= a.size());
+    CCASSERT(space.globalID()[0] <= a.size());
 #endif
 
     bool status = true;
@@ -158,7 +158,7 @@ bool write_blockvector(const std::string& filePrefix,
                        std::function<void (std::ostream&, const T&)> func)
 {
 #ifdef USE_ASSERT
-    assert(space.globalID()[0] <= a.size());
+    CCASSERT(space.globalID()[0] <= a.size());
 #endif
 
     std::stringstream ss;

@@ -26,6 +26,7 @@ class Group
 public:
     typedef BASE BaseField;
     typedef SCALAR ScalarField;
+	typedef CURVE Curve;
 
     // symmetric pairing group parameters
     class Params
@@ -248,7 +249,7 @@ public:
         return true;
     }
 
-private:
+//private:
     BASE m_X, m_Y, m_Z;
 };
 

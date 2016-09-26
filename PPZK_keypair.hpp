@@ -173,7 +173,7 @@ public:
             m_vk.empty();
     }
 
-private:
+//private:
     PPZK_ProvingKey<PAIRING> m_pk;
     PPZK_VerificationKey<PAIRING> m_vk;
 };

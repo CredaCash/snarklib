@@ -114,12 +114,12 @@ public:
 
             G2 Q1 = CURVE::mul_by_q(Qcopy);
 #ifdef USE_ASSERT
-            assert(Fq2::one() == Q1.z());
+            CCASSERT(Fq2::one() == Q1.z());
 #endif
 
             G2 Q2 = CURVE::mul_by_q(Q1);
 #ifdef USE_ASSERT
-            assert(Fq2::one() == Q2.z());
+            CCASSERT(Fq2::one() == Q2.z());
 #endif
 
             if (ate_is_loop_count_neg()) { // always false

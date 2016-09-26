@@ -29,13 +29,14 @@ protected:
     void* factory(const std::size_t min_size)
     {
 #ifdef USE_ASSERT
-        assert(min_size > 1);
+        CCASSERT(min_size > 1);
 #endif
         const std::size_t log_min_size = ceil_log2(min_size);
 #ifdef USE_ASSERT
-        assert(log_min_size <= (FR::params.s() + 1));
+        CCASSERT(log_min_size <= (FR::params.s() + 1));
 #endif
 
+		CCASSERT(log_min_size < 64);
         if (min_size == (1u << log_min_size)) {
             if (log_min_size == FR::params.s() + 1)
                 return CRTP<FR>::extended_radix2(min_size);
@@ -43,8 +44,10 @@ protected:
                 return CRTP<FR>::basic_radix2(min_size);
 
         } else {
+			CCASSERT(ceil_log2(min_size) - 1 < 64);
             const std::size_t big = 1u << (ceil_log2(min_size) - 1);
             const std::size_t small = min_size - big;
+			CCASSERT(ceil_log2(small) < 64);
             const std::size_t rounded_small = 1u << ceil_log2(small);
 
             if (big == rounded_small) {
@@ -71,14 +74,14 @@ public:
 
         void FFT(std::vector<T>& a) const {
 #ifdef USE_ASSERT
-            assert(a.size() == min_size());
+            CCASSERT(a.size() == min_size());
 #endif
             m_FFT(a);
         }
 
         void iFFT(std::vector<T>& a) const {
 #ifdef USE_ASSERT
-            assert(a.size() == min_size());
+            CCASSERT(a.size() == min_size());
 #endif
             m_iFFT(a);
         }
@@ -105,7 +108,7 @@ public:
 
         void add_poly_Z(const T& coeff, std::vector<T>& H) const {
 #ifdef USE_ASSERT
-            assert(H.size() == min_size() + 1);
+            CCASSERT(H.size() == min_size() + 1);
 #endif
             m_add_poly_Z(coeff, H);
         }
@@ -128,8 +131,8 @@ public:
         T get_root_of_unity(const std::size_t n) const {
             const std::size_t logn = ceil_log2(n);
 #ifdef USE_ASSERT
-            assert(n == (1u << logn));
-            assert(logn <= T::params.s());
+            CCASSERT(n == (1u << logn));
+            CCASSERT(logn <= T::params.s());
 #endif
 
             T omega = T::params.root_of_unity();
@@ -148,7 +151,7 @@ public:
             const std::size_t n = a.size();
             const std::size_t logn = ceil_log2(n);
 #ifdef USE_ASSERT
-            assert(n == (1u << logn));
+            CCASSERT(n == (1u << logn));
 #endif
 
             for (std::size_t k = 0; k < n; ++k) {
@@ -192,7 +195,7 @@ public:
             }
 
 #ifdef USE_ASSERT
-            assert(m == (1u << ceil_log2(m)));
+            CCASSERT(m == (1u << ceil_log2(m)));
 #endif
 
             const T omega = get_root_of_unity(m);
@@ -252,19 +255,22 @@ public:
     static
     std::size_t getDegree(const std::size_t min_size) {
 #ifdef USE_ASSERT
-        assert(min_size > 1);
+        CCASSERT(min_size > 1);
 #endif
         const std::size_t log_min_size = ceil_log2(min_size);
 #ifdef USE_ASSERT
-        assert(log_min_size <= (T::params.s() + 1));
+        CCASSERT(log_min_size <= (T::params.s() + 1));
 #endif
 
+		CCASSERT(log_min_size < 64);
         if (min_size == (1u << log_min_size)) {
             return min_size;
 
         } else {
+			CCASSERT(ceil_log2(min_size) - 1 < 64);
             const std::size_t big = 1u << (ceil_log2(min_size) - 1);
             const std::size_t small = min_size - big;
+			CCASSERT(ceil_log2(small) < 64);
             const std::size_t rounded_small = 1u << ceil_log2(small);
 
             return big + rounded_small;

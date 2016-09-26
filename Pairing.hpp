@@ -114,7 +114,7 @@ public:
             m_H.marshal_in_rawspecial(is);
     }
 
-private:
+//private:
     GA m_G;
     GB m_H;
 };

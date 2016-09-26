@@ -220,9 +220,45 @@ public:
         os << size() << std::endl;
 
         // index vector
-        for (const auto& a : m_index) {
-            os << a << std::endl;
+        //for (const auto& a : m_index) {
+            //os << a << std::endl;
+		unsigned zeros = 0;
+		//std::cerr << "marshal_out indexes" << std::endl;
+        for (std::size_t i = 0; i < m_index.size(); ++i) {
+			//std::cerr << m_index[i] << std::endl;
+			unsigned a = m_index[i];
+			if (i)
+				a -= m_index[i-1] + 1;
+			if (!a)
+			{
+				zeros++;
+				continue;
+			}
+			//std::cerr << "zeros " << zeros << " value " << a << std::endl;
+			CCASSERT(zeros < 0xffffffff);
+			if (zeros < 255)
+				os.write((char*)&zeros, 1);
+			else
+			{
+				os.put(255);
+				os.write((char*)&zeros, 4);
+			}
+			zeros = 0;
+			CCASSERT(a < 0xffff);
+			if (a < 255)
+				os.write((char*)&a, 1);
+			else
+			{
+				os.put(255);
+				os.write((char*)&a, 2);
+			}
         }
+		if (zeros)
+		{
+			CCASSERT(zeros < 0xffffffff);
+			os.put(255);
+			os.write((char*)&zeros, 4);
+		}
 
         // mark
         os << 1;
@@ -245,8 +281,25 @@ public:
 
         // index vector
         m_index.resize(numberElems);
+        char c;
+        if (!is.get(c) || ('\n' != c)) return false;
+		unsigned zeros = -1;
+		//std::cerr << "marshal_in indexes" << std::endl;
         for (std::size_t i = 0; i < numberElems; ++i) {
-            if (!(is >> m_index[i])) return false;
+            //if (!(is >> m_index[i])) return false;
+			m_index[i] = 0;
+			if (zeros == -1)
+			{
+				zeros = 0;
+				if (!is.read((char*)&zeros, 1)) return false;
+				if (zeros == 255 && !is.read((char*)&zeros, 4)) return false;
+			}
+			if (!zeros && !is.read((char*)&m_index[i], 1)) return false;
+			if (m_index[i] == 255 && !is.read((char*)&m_index[i], 2)) return false;
+			if (i > 0)
+				m_index[i] += m_index[i-1] + 1;
+			//std::cerr << m_index[i] << " zeros " << zeros << std::endl;
+			zeros--;
         }
 
         // mark
@@ -254,7 +307,7 @@ public:
         if (!(is >> mark) || (1 != mark)) return false;
 
         // space
-        char c;
+        //char c;
         if (!is.get(c) || (' ' != c)) return false;
 
         // value vector

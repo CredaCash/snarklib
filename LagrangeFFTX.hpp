@@ -20,8 +20,8 @@ public:
           omega(BASE::get_root_of_unity(min_size))
     {
 #ifdef USE_ASSERT
-        assert(min_size > 1);
-        assert(ceil_log2(min_size) <= T::params.s());
+        CCASSERT(min_size > 1);
+        CCASSERT(ceil_log2(min_size) <= T::params.s());
 #endif
     }
 
@@ -88,8 +88,8 @@ public:
           shift(BASE::coset_shift())
     {
 #ifdef USE_ASSERT
-        assert(min_size > 1);
-        assert(ceil_log2(min_size) == T::params.s() + 1);
+        CCASSERT(min_size > 1);
+        CCASSERT(ceil_log2(min_size) == T::params.s() + 1);
 #endif
     }
 
@@ -234,9 +234,11 @@ public:
           big_omega(squared(omega)),
           small_omega(BASE::get_root_of_unity(small_m))
     {
+		CCASSERT(ceil_log2(min_size) < 64);
+
 #ifdef USE_ASSERT
-        assert(min_size > 1);
-        assert(small_m == 1u << ceil_log2(small_m));
+        CCASSERT(min_size > 1);
+        CCASSERT(small_m == 1u << ceil_log2(small_m));
 #endif
     }
 
@@ -327,6 +329,7 @@ protected:
 
         std::vector<T> e(small_m, T::zero());
 
+		CCASSERT(ceil_log2(big_m) - ceil_log2(small_m) < 64);
         const std::size_t compr = 1u << (ceil_log2(big_m) - ceil_log2(small_m));
         for (std::size_t i = 0; i < small_m; ++i) {
             for (std::size_t j = 0; j < compr; ++j)
@@ -374,6 +377,7 @@ protected:
             a[i] = U0[i];
         }
 
+		CCASSERT(ceil_log2(big_m) - ceil_log2(small_m) < 64);
         const std::size_t compr = 1u << (ceil_log2(big_m) - ceil_log2(small_m));
         for (std::size_t i = 0; i < small_m; ++i) {
             for (std::size_t j = 1; j < compr; ++j) {

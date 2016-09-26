@@ -278,13 +278,15 @@ public:
         *this = a;
     }
 
-    explicit FpModel(const long a) {
-        *this = a;
-    }
-
     explicit FpModel(const unsigned long a) {
         *this = a;
     }
+
+#if ((ULONG_MAX >> 63) == 0)
+    explicit FpModel(const uint64_t a) {
+        *this = a;
+    }
+#endif
 
     explicit FpModel(const std::string& a)
         : FpModel{BigInt<N>(a)}
@@ -302,17 +304,27 @@ public:
         return *this;
     }
 
+#if ((ULONG_MAX >> 63) == 0)
+    FpModel& operator= (const uint64_t a) {
+        m_monty = a;
+
+        mulReduce(Fp::params.Rsquared()); // asm
+        return *this;
+    }
+#endif
+
     // assignment with signed long
     FpModel& operator= (const long a) {
         if (a >= 0) {
             return *this = static_cast<unsigned long>(a);
 
         } else {
+			*this = 0;
             const mp_limb_t borrow
                 = mpn_sub_1(m_monty.data(), MODULUS.data(), N, -a);
 
 #ifdef USE_ASSERT
-            assert(0 == borrow);
+            CCASSERT(0 == borrow);
 #endif
         }
 
@@ -392,7 +404,7 @@ public:
     // inversion in-place
     FpModel& invert() {
 #ifdef USE_ASSERT
-        assert(! isZero());
+        CCASSERT(! isZero());
 #endif
 
         BigInt<N> g, v = MODULUS;
@@ -408,7 +420,7 @@ public:
                                         N);
 
 #ifdef USE_ASSERT
-        assert(1 == gn && 1 == g.data()[0]);
+        CCASSERT(1 == gn && 1 == g.data()[0]);
 #endif
 
         mp_limb_t q;
@@ -431,7 +443,7 @@ public:
                 = mpn_sub_n(m_monty.data(), MODULUS.data(), m_monty.data(), N);
 
 #ifdef USE_ASSERT
-            assert(0 == borrow);
+            CCASSERT(0 == borrow);
 #endif
         }
 
@@ -625,30 +637,45 @@ Field<FpModel<N, MODULUS>, A> sqrt(const Field<FpModel<N, MODULUS>, A>& a)
     const auto ONE = FpA::one();
     std::size_t v = FpA::params.s();
 
+	unsigned deadline = 2000;
+
     while (ONE != b) {
+		//std::cerr << "b loop" << std::endl;
         auto b2m = b;
         std::size_t m = 0;
 
         while (ONE != b2m) {
+			//std::cerr << "b2m = squared(b2m)" << std::endl;
             b2m = squared(b2m);
             ++m;
+			if (!--deadline) goto failure;
         }
 
         int j = v - m - 1;
         w = z;
 
         while (j > 0) {
+			//std::cerr << j << "w = squared(w)" << std::endl;
             w = squared(w);
             --j;
+			if (!--deadline) goto failure;
         }
 
         z = squared(w);
         b = b * z;
         x = x * w;
         v = m;
+		if (!--deadline) goto failure;
     }
 
+	//std::cerr << "sqrt done deadline left " << deadline << std::endl;
+
     return x;
+
+failure:
+	//std::cerr << "sqrt did not converge" << std::endl;
+
+	return x;	// proof will fail
 }
 
 } // namespace snarklib

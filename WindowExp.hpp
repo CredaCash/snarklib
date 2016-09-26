@@ -182,6 +182,7 @@ public:
             const std::size_t outer = offset + j;
 
             std::size_t inner = 0;
+			CCASSERT(m_windowBits < 64);
             for (std::size_t i = 0; i < m_windowBits; ++i) {
                 if (pow_val.testBit(outer * m_windowBits + i))
                     inner |= 1u << i;
@@ -229,7 +230,7 @@ public:
                   ProgressCallback* callback = nullptr) const
     {
 #ifdef USE_ASSERT
-        assert(res.size() == exponentVec.size());
+        CCASSERT(res.size() == exponentVec.size());
 #endif
 
         const std::size_t N = exponentVec.size();
@@ -292,7 +293,7 @@ public:
                   ProgressCallback* callback = nullptr) const
     {
 #ifdef USE_ASSERT
-        assert(res.space() == exponentVec.space() &&
+        CCASSERT(res.space() == exponentVec.space() &&
                res.block() == exponentVec.block());
 #endif
 
@@ -328,10 +329,12 @@ private:
     }
 
     static std::size_t windowSize(const std::size_t windowbits) {
+		CCASSERT(windowbits < 64);
         return 1u << windowbits;
     }
 
     static std::size_t lastInWindow(const std::size_t windowbits) {
+		CCASSERT(numBits() - (numWindows(windowbits) - 1) * windowbits < 64);
         return 1u << (numBits() - (numWindows(windowbits) - 1) * windowbits);
     }
 

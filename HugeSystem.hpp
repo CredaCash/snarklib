@@ -160,7 +160,7 @@ public:
                 return false; // do not write back to disk
             });
 
-        const auto
+        const unsigned
             nzA = std::count_if(touchA.begin(), touchA.end(), [] (int i) -> bool { return i; }),
             nzB = std::count_if(touchB.begin(), touchB.end(), [] (int i) -> bool { return i; });
 

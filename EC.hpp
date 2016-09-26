@@ -41,8 +41,8 @@ public:
     static void initParams()
     {
 #ifdef USE_ASSERT
-        assert(modulusIsValid());
-        assert(8 == sizeof(mp_limb_t) || 4 == sizeof(mp_limb_t));
+        CCASSERT(modulusIsValid());
+        CCASSERT(8 == sizeof(mp_limb_t) || 4 == sizeof(mp_limb_t));
 #endif
 
         if (T::modulus_r() == MODULUS) { T::initModulusR(); }
@@ -84,24 +84,6 @@ public:
 #include <snarklib/EC_BN128_InitGroups.hpp>
 #include <snarklib/EC_BN128_Pairing.hpp>
 
-#include <snarklib/EC_Edwards_Modulus.hpp>
-#include <snarklib/EC_Edwards_InitFields.hpp>
-#include <snarklib/EC_Edwards_GroupCurve.hpp>
-#include <snarklib/EC_Edwards_InitGroups.hpp>
-#include <snarklib/EC_Edwards_Pairing.hpp>
-
-#include <snarklib/EC_MNT4_Modulus.hpp>
-#include <snarklib/EC_MNT4_InitFields.hpp>
-#include <snarklib/EC_MNT4_GroupCurve.hpp>
-#include <snarklib/EC_MNT4_InitGroups.hpp>
-#include <snarklib/EC_MNT4_Pairing.hpp>
-
-#include <snarklib/EC_MNT6_Modulus.hpp>
-#include <snarklib/EC_MNT6_InitFields.hpp>
-#include <snarklib/EC_MNT6_GroupCurve.hpp>
-#include <snarklib/EC_MNT6_InitGroups.hpp>
-#include <snarklib/EC_MNT6_Pairing.hpp>
-
 namespace snarklib {
 
 // convenience aliases for BN128
@@ -115,45 +97,6 @@ struct BN128 : public BN128_Modulus
 
     template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
     using Pairing = BN128_Pairing<N, MODULUS_R, MODULUS_Q>;
-};
-
-// convenience aliases for Edwards
-struct Edwards : public Edwards_Modulus
-{
-    template <mp_size_t N, const BigInt<N>& MODULUS>
-    using Fields = Edwards_InitFields<N, MODULUS>;
-
-    template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
-    using Groups = Edwards_InitGroups<N, MODULUS_R, MODULUS_Q>;
-
-    template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
-    using Pairing = Edwards_Pairing<N, MODULUS_R, MODULUS_Q>;
-};
-
-// convenience aliases for MNT4
-struct MNT4 : public MNT4_Modulus
-{
-    template <mp_size_t N, const BigInt<N>& MODULUS>
-    using Fields = MNT4_InitFields<N, MODULUS>;
-
-    template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
-    using Groups = MNT4_InitGroups<N, MODULUS_R, MODULUS_Q>;
-
-    template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
-    using Pairing = MNT4_Pairing<N, MODULUS_R, MODULUS_Q>;
-};
-
-// convenience aliases for MNT6
-struct MNT6 : public MNT6_Modulus
-{
-    template <mp_size_t N, const BigInt<N>& MODULUS>
-    using Fields = MNT6_InitFields<N, MODULUS>;
-
-    template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
-    using Groups = MNT6_InitGroups<N, MODULUS_R, MODULUS_Q>;
-
-    template <mp_size_t N, const BigInt<N>& MODULUS_R, const BigInt<N>& MODULUS_Q>
-    using Pairing = MNT6_Pairing<N, MODULUS_R, MODULUS_Q>;
 };
 
 } // namespace snarklib

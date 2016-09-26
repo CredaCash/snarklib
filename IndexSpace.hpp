@@ -67,8 +67,8 @@ public:
     void blockPartition(const std::array<std::size_t, N>& blockID) {
 #ifdef USE_ASSERT
         for (std::size_t i = 0; i < N; ++i) {
-            assert(0 != blockID[i]);
-            assert(blockID[i] <= m_globalID[i]);
+            CCASSERT(0 != blockID[i]);
+            CCASSERT(blockID[i] <= m_globalID[i]);
         }
 #endif
 

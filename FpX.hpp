@@ -978,7 +978,7 @@ cyclotomic_exp(const Field<Field<Field<FpModel<N, MODULUS>, 2>, 3>, 2>& base,
                 res = cyclotomic_squared(res);
             }
 
-            if (exponent.data()[i] & (1ul << j)) {
+            if (exponent.data()[i] & (((uint64_t)1) << j)) {
                 found_one = true;
                 res = res * base;
             }

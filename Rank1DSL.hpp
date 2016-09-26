@@ -106,7 +106,7 @@ public:
 
     void assignVar(const R1Variable<T>& x, const T& value) {
 #ifdef USE_ASSERT
-        assert(! x.zeroIndex());
+        CCASSERT(! x.zeroIndex());
 #endif
 
         // subtract one to make absolute index
@@ -123,7 +123,7 @@ public:
 
     R1Witness truncate(const std::size_t leadingSize) const {
 #ifdef USE_ASSERT
-        assert(leadingSize <= m_va.size());
+        CCASSERT(leadingSize <= m_va.size());
 #endif
 
         std::set<std::size_t> unsetIdx;
@@ -140,7 +140,7 @@ public:
 
     const T& operator[] (const std::size_t index) const {
 #ifdef USE_ASSERT
-        assert(index < m_va.size());
+        CCASSERT(index < m_va.size());
 #endif
 
         return m_va[index];
@@ -431,7 +431,7 @@ public:
         return true; // ok
     }
 
-private:
+//private:
     std::vector<R1Term<T>> m_terms;
 };
 
@@ -1048,7 +1048,7 @@ public:
 
 #ifdef USE_ASSERT
         if (m_minIndex != -1 || m_maxIndex != 0) {
-            assert(m_minIndex <= m_maxIndex);
+            CCASSERT(m_minIndex <= m_maxIndex);
         }
 #endif
 

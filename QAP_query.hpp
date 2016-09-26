@@ -251,7 +251,7 @@ std::vector<T> qap_query_IC(const QAP<SYS, T>& qap,
     for (std::size_t i = 0; i < vec.size(); ++i) {
         vec[i] = ABCt.vecA()[3 + i] * random_rA;
 #ifdef USE_ASSERT
-        assert(! vec[i].isZero());
+        CCASSERT(! vec[i].isZero());
 #endif
     }
 
@@ -299,7 +299,7 @@ public:
             for (std::size_t i = At.startIndex(); i < limit; ++i) {
                 m_vec[i] = At[3 + i] * m_random_rA;
 #ifdef USE_ASSERT
-                assert(! m_vec[i].isZero());
+                CCASSERT(! m_vec[i].isZero());
 #endif
                 At[3 + i] = T::zero();
             }
@@ -358,7 +358,7 @@ public:
                      const BlockVector<T>& Bt,
                      const BlockVector<T>& Ct) {
 #ifdef USE_ASSERT
-        assert(At.space() == Bt.space() &&
+        CCASSERT(At.space() == Bt.space() &&
                Bt.space() == Ct.space() &&
                At.block() == Bt.block() &&
                Bt.block() == Ct.block());

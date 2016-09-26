@@ -185,7 +185,7 @@ private:
 
 #ifdef USE_ASSERT
         // make sure to add temporary H, not regular H
-        assert(N < m_vec.size());
+        CCASSERT(N < m_vec.size());
 #endif
 
         std::size_t i = 0;

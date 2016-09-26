@@ -79,6 +79,7 @@ public:
         m_base = rhs.m_base;
         m_coeffs = std::move(rhs.m_coeffs);
         m_encoded_terms = std::move(rhs.m_encoded_terms);
+        return *this;
     }
 
     void accumTable(const WindowExp<G1>& g1_table,

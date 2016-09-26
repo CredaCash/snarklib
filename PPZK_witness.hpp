@@ -110,7 +110,7 @@ public:
                     ProgressCallback* callback = nullptr)
     {
 #ifdef USE_ASSERT
-        assert(query.space() == scalar.space() &&
+        CCASSERT(query.space() == scalar.space() &&
                query.block() == scalar.block());
 #endif
 
@@ -160,7 +160,7 @@ public:
         const std::size_t startOffset = 4;
 
 #ifdef USE_ASSERT
-        assert(query.size() >= 4);
+        CCASSERT(query.size() >= 4);
 #endif
 
         m_val = m_val
@@ -185,7 +185,7 @@ public:
 
         if (0 == query.block()[0]) {
 #ifdef USE_ASSERT
-            assert(query.size() >= 4);
+            CCASSERT(query.size() >= 4);
 #endif
 
             m_val = m_val
