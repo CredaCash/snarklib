@@ -31,7 +31,8 @@ struct OrdPair
     {}
 
     bool operator< (const OrdPair& other) const {
-        return key < other.key;
+        //return key < other.key;
+        return key.multiExp_lessthan(other.key);
     }
 };
 
@@ -288,7 +289,7 @@ public:
         for (std::size_t i = 0; i < numberElems; ++i) {
             //if (!(is >> m_index[i])) return false;
 			m_index[i] = 0;
-			if (zeros == -1)
+			if (zeros == (unsigned)(-1))
 			{
 				zeros = 0;
 				if (!is.read((char*)&zeros, 1)) return false;

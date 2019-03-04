@@ -350,6 +350,25 @@ private:
     const std::size_t m_windowBits;
     const std::array<std::size_t, 1> m_block;
     std::vector<std::vector<GROUP>> m_powers_of_g;
+
+public:
+	WindowExp(WindowExp&& other)
+	 :
+		m_space(std::move(other.m_space)),
+		m_windowBits(other.m_windowBits),
+		m_block(std::move(other.m_block)),
+		m_powers_of_g(std::move(other.m_powers_of_g))
+	{ }
+
+	WindowExp& operator= (WindowExp&& other)
+	{
+		const_cast<IndexSpace<1>&>(m_space) = std::move(other.m_space);
+		const_cast<std::size_t&>(m_windowBits) = other.m_windowBits;
+		const_cast<std::array<std::size_t, 1>&>(m_block) = std::move(other.m_block);
+		m_powers_of_g = std::move(other.m_powers_of_g);
+
+		return *this;
+	}
 };
 
 } // namespace snarklib

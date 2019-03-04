@@ -213,14 +213,15 @@ private:
 //
 
 template <typename GA, typename GB, typename FR>
-SparseVector<Pairing<GA, GB>> ppzk_query_ABC(const std::vector<FR>& qap_query,
+void /* SparseVector<Pairing<GA, GB>> */ ppzk_query_ABC(const std::vector<FR>& qap_query,
                                              const FR& random_rX,
                                              const FR& random_alphaX_rX,
                                              const WindowExp<GA>& ga_table,
                                              const WindowExp<GB>& gb_table,
+	                                         SparseVector<Pairing<GA, GB>> &abc,
                                              ProgressCallback* callback = nullptr)
 {
-    return batchExp(ga_table,
+    abc = batchExp(ga_table,
                     gb_table,
                     random_rX,
                     random_alphaX_rX,
@@ -295,9 +296,10 @@ template <typename PAIRING> using PPZK_QueryC =
 //
 
 template <typename PAIRING>
-std::vector<typename PAIRING::G1>
+void //std::vector<typename PAIRING::G1>
 ppzk_query_HK(const std::vector<typename PAIRING::Fr>& qap_query,
               const WindowExp<typename PAIRING::G1>& g1_table,
+              std::vector<typename PAIRING::G1> &hk,
               ProgressCallback* callback = nullptr)
 {
     std::vector<typename PAIRING::G1> vec(qap_query.size(),
@@ -307,7 +309,7 @@ ppzk_query_HK(const std::vector<typename PAIRING::Fr>& qap_query,
                       qap_query,
                       callback);
 
-    return vec;
+    hk = vec;
 }
 
 template <typename PAIRING>

@@ -88,6 +88,17 @@ public:
     }
 #endif
 
+#if 1 //defined(__int128_t)
+    BigInt(const __int128_t a)
+        : BigInt{}
+    {
+		CCASSERT(sizeof(m_data[0]) * CHAR_BIT == 64);
+
+        m_data[0] = a;
+        m_data[1] = a >> 64;
+    }
+#endif
+
     // string (decimal number)
     explicit BigInt(const std::string& base10)
         : BigInt{}
@@ -170,7 +181,8 @@ public:
     }
 
     // used by multiExp() for a max-heap
-    bool operator< (const BigInt<N>& other) const {
+    bool multiExp_lessthan(const BigInt<N>& other) const {
+// this asm code doesn't work in the general case
 #if defined(__x86_64__) && defined(USE_ASM)
         if (3 == N)
         {
@@ -232,11 +244,17 @@ public:
         else
 #endif
         {
+            return *this < other;
+        }
+    }
+
+#if 0 // use comparison operators in BigIntOps.hpp instead
+    bool operator< (const BigInt<N>& other) const {
             return 0 > mpn_cmp(data(),
                                other.data(),
                                N);
-        }
     }
+#endif
 
     void clear() {
         mpn_zero(data(), N);

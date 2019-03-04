@@ -1047,7 +1047,7 @@ public:
         if (!is) return false;
 
 #ifdef USE_ASSERT
-        if (m_minIndex != -1 || m_maxIndex != 0) {
+        if (m_minIndex != (std::size_t)(-1) || m_maxIndex != 0) {
             CCASSERT(m_minIndex <= m_maxIndex);
         }
 #endif
