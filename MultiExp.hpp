@@ -12,8 +12,9 @@
 #include <snarklib/BigInt.hpp>
 #include <snarklib/ProgressCallback.hpp>
 
-extern int g_multiExp_nthreads;	// global to set # of multiExp threads
-extern int g_multiExp_nice;		// global to set # of multiExp thread priority
+extern int g_multiExp_nthreads;	// global to set number of multiExp threads
+extern int g_multiExp_nice;		// global to set multiExp thread priority
+void set_nice(int nice);
 
 namespace snarklib {
 
@@ -101,47 +102,7 @@ void multiExpThread(std::vector<T>& baseVec,
     CCASSERT(offset + nelem <= scalarQ.size());
 #endif
 
-	if (nice)
-	{
-#ifdef _WIN32
-		auto hthread = GetCurrentThread();
-		int priority = GetThreadPriority(hthread);
-
-		priority -= nice;
-
-		if (priority > THREAD_PRIORITY_TIME_CRITICAL)
-			priority = THREAD_PRIORITY_TIME_CRITICAL;
-		else if (priority > THREAD_PRIORITY_HIGHEST)
-			priority = THREAD_PRIORITY_HIGHEST;
-
-		if (priority < THREAD_PRIORITY_IDLE)
-			priority = THREAD_PRIORITY_IDLE;
-		else if (priority < THREAD_PRIORITY_LOWEST)
-			priority = THREAD_PRIORITY_LOWEST;
-
-		SetThreadPriority(hthread, priority);
-#else
-		sched_param sp;
-		sched_getparam(0, &sp);
-
-		if (nice < 0)
-		{
-			if (sp.sched_priority > nice)
-				sp.sched_priority -= nice;
-			else if (sp.sched_priority > 1)
-				sp.sched_priority = 1;
-		}
-		else
-		{
-			sp.sched_priority -= nice;
-
-			if (sp.sched_priority > 99)
-				sp.sched_priority = 99;
-		}
-
-		sched_setparam(0, &sp);
-#endif
-	}
+	set_nice(nice);
 
     const mp_size_t N = F::BaseType::numberLimbs();
     typedef OrdPair<BigInt<N>, std::size_t> ScalarIndex;
@@ -210,7 +171,7 @@ T multiExp(const std::vector<T>& base,
     if (base.empty()) {
         // final callbacks
         for (std::size_t i = callbackCount; i < M; ++i)
-            callback->minor();
+            callback->minorProgress();
 
         return T::zero();
     }
@@ -218,7 +179,7 @@ T multiExp(const std::vector<T>& base,
     if (1 == base.size()) {
         // final callbacks
         for (std::size_t i = callbackCount; i < M; ++i)
-            callback->minor();
+            callback->minorProgress();
 
         return scalar[0][0] * base[0];
     }
@@ -344,7 +305,7 @@ T multiExp(const std::vector<T>& base,
 
     // final callbacks
     for (std::size_t i = callbackCount; i < M; ++i)
-        callback->minor();
+        callback->minorProgress();
 
     return res;
 }

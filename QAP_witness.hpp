@@ -134,7 +134,7 @@ public:
                 ++i;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block
@@ -197,7 +197,7 @@ private:
                 ++i;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block

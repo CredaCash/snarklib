@@ -360,10 +360,11 @@ public:
 	for (unsigned i = 0; i < N*sizeof(mp_limb_t); ++i)
 		*((unsigned char *)m_data.data() + i) = ++count;
 	return *this;
-#elif defined(_WIN32)
+#elif 1
 	CCRandom(m_data.data(), N*sizeof(mp_limb_t));
 	return *this;
 #else
+#error using std::random_device
         std::random_device rd; // uses /dev/urandom
 
         return randomize<unsigned int>(

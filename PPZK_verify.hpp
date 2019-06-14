@@ -31,12 +31,12 @@ bool weakVerify(const PPZK_PrecompVerificationKey<PAIRING>& pvk,
     const auto ONE = GT::one();
 
     // step 6 (starting) - accumulate input consistency
-    dummy->major();
+    dummy->majorProgress();
     const auto accum_IC = pvk.encoded_IC_query().accumWitness(input);
     if (0 != accum_IC.input_size() || ! proof.wellFormed()) return false;
 
     // step 5 - knowledge commitment for A
-    dummy->major();
+    dummy->majorProgress();
     const G1_precomp proof_g_A_g_precomp(proof.A().G());
     const G1_precomp proof_g_A_h_precomp(proof.A().H());
 
@@ -54,7 +54,7 @@ bool weakVerify(const PPZK_PrecompVerificationKey<PAIRING>& pvk,
     if (ONE != kc_A) return false;
 
     // step 4 - knowledge commitment for B
-    dummy->major();
+    dummy->majorProgress();
     const G2_precomp proof_g_B_g_precomp(proof.B().G());
     const G1_precomp proof_g_B_h_precomp(proof.B().H());
 
@@ -72,7 +72,7 @@ bool weakVerify(const PPZK_PrecompVerificationKey<PAIRING>& pvk,
     if (ONE != kc_B) return false;
 
     // step 3 - knowledge commitment for C
-    dummy->major();
+    dummy->majorProgress();
     const G1_precomp proof_g_C_g_precomp(proof.C().G());
     const G1_precomp proof_g_C_h_precomp(proof.C().H());
 
@@ -90,7 +90,7 @@ bool weakVerify(const PPZK_PrecompVerificationKey<PAIRING>& pvk,
     if (ONE != kc_C) return false;
 
     // step 2 - quadratic arithmetic program divisibility
-    dummy->major();
+    dummy->majorProgress();
     const G1_precomp proof_g_A_g_acc_precomp(proof.A().G() + accum_IC.base());
     const G1_precomp proof_g_H_precomp(proof.H());
 
@@ -110,7 +110,7 @@ bool weakVerify(const PPZK_PrecompVerificationKey<PAIRING>& pvk,
     if (ONE != QAP) return false;
 
     // step 1 - same coefficients
-    dummy->major();
+    dummy->majorProgress();
     const G1_precomp proof_g_K_precomp(proof.K());
     const G1_precomp proof_g_A_g_acc_C_precomp(proof.A().G() + accum_IC.base() + proof.C().G());
 

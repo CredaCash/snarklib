@@ -87,12 +87,12 @@ public:
         const QAP_QueryH<SYS, Fr> Ht(qap);
 
         // step 8 - G1 window table
-        dummy->major(true);
+        dummy->majorProgress(true);
         WindowExp<G1> g1_table_temp;
 		std::thread thread_G1(SetWindowExp<G1>, g1_exp_count(qap, ABCt, Ht), std::ref(g1_table_temp));
 
         // step 7 - G2 window table
-        dummy->major(true);
+        dummy->majorProgress(true);
         WindowExp<G2> g2_table_temp;
 		std::thread thread_G2(SetWindowExp<G2>, g2_exp_count(ABCt), std::ref(g2_table_temp));
 
@@ -103,12 +103,12 @@ public:
         const WindowExp<G2> g2_table(std::move(g2_table_temp));
 
         // step 6 - input consistency
-        dummy->major(true);
+        dummy->majorProgress(true);
         PPZK_QueryIC<PAIRING> ppzkIC(qap_query_IC(qap, ABCt, rA));
         ppzkIC.accumTable(g1_table, dummy);
 
         // step 5 - A
-        dummy->major(true);
+        dummy->majorProgress(true);
 		auto query_A = qap_query_IC(qap, ABCt);
         SparseVector<Pairing<G1, G1>> A;
 		std::thread thread_A(ppzk_query_ABC<G1, G1, Fr>, std::ref(query_A), std::ref(rA), std::ref(alphaA_rA),
@@ -116,7 +116,7 @@ public:
                                 std::ref(A), dummy);
 
         // step 4 - B
-        dummy->major(true);
+        dummy->majorProgress(true);
 		auto query_B = ABCt.vecB();
         SparseVector<Pairing<G2, G1>> B;
 		std::thread thread_B(ppzk_query_ABC<G2, G1, Fr>, std::ref(query_B), std::ref(rB), std::ref(alphaB_rB),
@@ -124,7 +124,7 @@ public:
                                 std::ref(B), dummy);
 
         // step 3 - C
-        dummy->major(true);
+        dummy->majorProgress(true);
 		auto query_C = ABCt.vecC();
         SparseVector<Pairing<G1, G1>> C;
 		std::thread thread_C(ppzk_query_ABC<G1, G1, Fr>, std::ref(query_C), std::ref(rC), std::ref(alphaC_rC),
@@ -132,7 +132,7 @@ public:
                                 std::ref(C), dummy);
 
         // step 2 - H
-        dummy->major(true);
+        dummy->majorProgress(true);
 		auto query_H = Ht.vec();
         std::vector<G1> H;
 		std::thread thread_H(ppzk_query_HK<PAIRING>, std::ref(query_H),
@@ -140,7 +140,7 @@ public:
                                         std::ref(H), dummy);
 
         // step 1 - K
-        dummy->major(true);
+        dummy->majorProgress(true);
 		auto query_K = qap_query_K(qap, ABCt, beta_rA, beta_rB, beta_rC);
         std::vector<G1> K;
 		std::thread thread_K(ppzk_query_HK<PAIRING>, std::ref(query_K),

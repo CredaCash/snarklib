@@ -145,7 +145,7 @@ public:
                 ++outer;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block
@@ -212,7 +212,7 @@ public:
                 ++i;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block
@@ -245,7 +245,7 @@ public:
                 ++i;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block
@@ -274,7 +274,7 @@ public:
                 ++i;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block
@@ -309,7 +309,7 @@ public:
                 ++i;
             }
 
-            callback->minor();
+            callback->minorProgress();
         }
 
         // remaining steps smaller than one block

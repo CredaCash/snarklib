@@ -211,7 +211,7 @@ SparseVector<Pairing<GA, GB>> batchExp_internal(
             ++index;
         }
 
-        callback->minor();
+        callback->minorProgress();
     }
 
     // remaining steps smaller than one block
@@ -299,7 +299,7 @@ void batchExp_internal(
                                 gb + tableB.exp(coeffB * vec[index])));
         }
 
-        callback->minor();
+        callback->minorProgress();
     }
 
     // remaining steps smaller than one block

@@ -80,7 +80,7 @@ public:
 		}
 
         // step 6 - A
-        dummy->major(true);
+        dummy->majorProgress(true);
         PPZK_WitnessA<PAIRING> Aw(qap, witness, d1);
         Aw.accumQuery(pk.A_query(), reserveTune, callback);
         m_A = Aw.val();
@@ -92,7 +92,7 @@ public:
 		}
 
         // step 5 - B
-        dummy->major(true);
+        dummy->majorProgress(true);
         PPZK_WitnessB<PAIRING> Bw(qap, witness, d2);
         Bw.accumQuery(pk.B_query(), reserveTune, callback);
         m_B = Bw.val();
@@ -104,7 +104,7 @@ public:
 		}
 
         // step 4 - C
-        dummy->major(true);
+        dummy->majorProgress(true);
         PPZK_WitnessC<PAIRING> Cw(qap, witness, d3);
         Cw.accumQuery(pk.C_query(), reserveTune, callback);
         m_C = Cw.val();
@@ -116,7 +116,7 @@ public:
 		}
 
         // step 1 - K
-        dummy->major(true);
+        dummy->majorProgress(true);
         PPZK_WitnessK<PAIRING> Kw(witness, d1, d2, d3);
         Kw.accumQuery(pk.K_query(), reserveTune, callback);
         m_K = Kw.val();
@@ -156,7 +156,7 @@ public:
 		}
 
         // step 3 - ABCH
-        dummy->major(true);
+        dummy->majorProgress(true);
         const QAP_WitnessABCH<SYS, Fr> ABCH(qap, witness, d1, d2, d3, callback);
 
 		if (TEST_BENCHMARK_PROOF)
@@ -166,7 +166,7 @@ public:
 		}
 
         // step 2 - H
-        dummy->major(true);
+        dummy->majorProgress(true);
         PPZK_WitnessH<PAIRING> Hw;
         Hw.accumQuery(pk.H_query(), ABCH.vec(), callback);
         m_H = Hw.val();
