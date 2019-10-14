@@ -259,7 +259,7 @@ public:
 
 template <typename BASE, typename SCALAR, typename CURVE>
 Group<BASE, SCALAR, CURVE>
-Group<BASE, SCALAR, CURVE>::Params::m_G_zero;
+Group<BASE, SCALAR, CURVE>::Params::m_G_zero = Group(BASE::zero(), BASE::one(), BASE::zero());	// initialize here to avoid maybe-uninitialized warning with GCC 8.3
 
 template <typename BASE, typename SCALAR, typename CURVE>
 Group<BASE, SCALAR, CURVE>
