@@ -17,8 +17,9 @@ The original libsnark project is here: [GitHub libsnark project]
 The author of snarklib has no relationship with the [SCIPR Lab] project or
 affiliated contributors.
 
-Modifications for the CredaCash&trade; project Copyright &copy; 2015-2019 Creda Software, Inc.
-CredaCash is a trademark of Creda Software, Inc.
+Modifications for the CredaCash&trade; project
+Copyright &copy; 2015-2024 Creda Foundation, Inc., or its contributors
+CredaCash is a trademark of Creda Foundation, Inc.
 
 --------------------------------------------------------------------------------
 [TOC]

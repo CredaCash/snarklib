@@ -12,6 +12,7 @@
 #include <snarklib/BigInt.hpp>
 #include <snarklib/ProgressCallback.hpp>
 
+extern volatile bool g_shutdown;
 extern int g_multiExp_nthreads;	// global to set number of multiExp threads
 extern int g_multiExp_nice;		// global to set multiExp thread priority
 void set_nice(int nice);
@@ -117,6 +118,9 @@ void multiExpThread(std::vector<T>& baseVec,
     while (! scalarPQ.empty() &&
            ! scalarPQ.top().key.isZero())
     {
+		if (g_shutdown)
+			return;
+
         auto a = scalarPQ.top();
         scalarPQ.pop();
 
@@ -130,7 +134,7 @@ void multiExpThread(std::vector<T>& baseVec,
                 bbits = b.key.numBits();
 
             reweight = (bbits >= (((uint64_t)1) << std::min((std::size_t)(20), abits - bbits)));
-			//std::cerr << "multiExp sizeof(int) " <<  sizeof(int) << " sizeof(bbits) " << sizeof(bbits) << " bbits " << bbits << " abits " << abits << " min(20,abits-bbits) " << std::min((std::size_t)(20), abits - bbits) << " 1<< " << (((uint64_t)1) << std::min((std::size_t)(20), abits - bbits)) << " reweight " << reweight << std::endl;
+			//std::cerr << "multiExp sizeof(int) " << sizeof(int) << " sizeof(bbits) " << sizeof(bbits) << " bbits " << bbits << " abits " << abits << " min(20,abits-bbits) " << std::min((std::size_t)(20), abits - bbits) << " 1<< " << (((uint64_t)1) << std::min((std::size_t)(20), abits - bbits)) << " reweight " << reweight << std::endl;
         }
 
         // reweighting is both optimization and avoids overflow, the
