@@ -244,7 +244,8 @@ public:
         else
 #endif
         {
-            return *this < other;
+            //return *this < other;
+            return mpn_cmp(data(), other.data(), N) < 0;
         }
     }
 
